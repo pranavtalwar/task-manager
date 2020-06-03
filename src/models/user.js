@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 
-mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api', {
-    useNewUrlParser: true,
-    useCreateIndex: true
-})
-
 const User = mongoose.model('User', {
     name: {
         type: String,
@@ -45,37 +40,4 @@ const User = mongoose.model('User', {
     }
 })
 
-// const me = new User({ 
-//     name: 'Pranav Talwar',
-//     email: 'talwar.pranav123@gmail.com',
-//     password: 'phone1234'
-
-// })
-
-// me.save().then((result) => {
-//     console.log(me)
-// }).catch((error) => {
-//     console.log(error)
-// })
-
-const Task = mongoose.model( 'Task', {
-    description: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    completed: {
-        type: Boolean,
-        default: false
-    }
-})
-
-const taskOne = new Task({
-    completed: false
-})
-
-taskOne.save().then((result) => {
-    console.log(taskOne)
-}).catch((error) => {
-    console.log(error)
-})
+module.exports = User
