@@ -1,4 +1,5 @@
 const express = require('express')
+const multer = require('multer')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const { sendWelcomeEmail, sendCancellationEmail } = require('../emails/account')
@@ -25,6 +26,25 @@ router.post('/users/login', async (req, res) => {
     } catch(e) {
         res.status(400).send()
     }
+})
+
+const upload = multer({
+    dest: 'avatars',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if(!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            cb(new Error('Please upload an image with a jpg, jpeg or a png extension.'))
+        }
+        cb(undefined, true)
+    }
+})
+
+router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+    res.send()
+}, (err, req, res, next) => {
+    res.status(400).send({ error: err.message })
 })
 
 router.post('/users/logout', auth, async (req, res) => {
