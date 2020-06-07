@@ -28,6 +28,45 @@ test('Should signup a new user', async () => {
         expect(user.password).not.toBe('1234567')
 }) 
 
+test('Should not signup user with invalid email', async() => {
+    await request(app).post('/users')
+        .send({
+            name: 'Firstname Lastname',
+            email: 'firsnameexample.com',
+            password: '1234567'
+        })
+        .expect(400)
+})
+
+test('Should not signup user with invalid password', async() => {
+    await request(app).post('/users')
+        .send({
+            name: 'Firstname Lastname',
+            email: 'firsname@example.com',
+            password: 'abcdef'
+        })
+        .expect(400)
+})
+
+test('Should not signup user without name', async() => {
+    await request(app).post('/users')
+        .send({
+            email: 'firsname@example.com',
+            password: 'abcdef'
+        })
+        .expect(400)
+})
+
+test('Should not signup user with exisiting account', async() => {
+    await request(app).post('/users')
+        .send({
+            name: userOne.name,
+            email: userOne.email,
+            password: userOne.password
+        })
+        .expect(400)
+})
+
 test('Should login existing user', async () => {
     const response = await request(app).post('/users/login')
         .send({
